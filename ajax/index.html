@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery DEMO Ajax</title>
+</head>
+<body>
+	<h1>YouTube Retrieval Test</h1>
+	<button>Retrieve YouTube Details</button>
+	<p class=p1></p>
+	<p class=p2></p>
+	<a><img src=""></a>
+	<a href="">
+
+
+
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script>
+
+	$("button").on('click', function() {
+
+		$.ajax({
+			dataType: "json",
+			url: 'youtube.json'
+		})
+		.success(function(data) {
+			$(".p1").html("<strong>This is the Video Title</strong>: "  + data.data.items[0].title);
+
+			var image = data.data.items[0].thumbnail.default;
+			var url = data.data.items[0].player.default;
+
+			//$(".p2").html("<a href='"+url+"'><img src='"+image+"'/></a>");//
+		
+
+			$("img").attr("src" , data.data.items[0].thumbnail.default);
+			$("a").attr("href" , data.data.items[0].player.default);
+		})
+
+		
+
+	});
+
+
+	
+
+
+	</script>
+</body>
+</html>

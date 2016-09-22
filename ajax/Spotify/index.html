@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spotidy Demo jQuery Ajax</title>
+</head>
+<body>
+	<h1>Spotify Demo App</h1>
+
+	<form action="#" id="search-artist">
+		<fieldset>
+			<legend>Search</legend>
+			<div>
+				<label for="artist">Write the artist you're looking for...</label>
+				<input type="text" id="artist-query">
+			</div>
+			<div>
+				<input type="submit" value="Search!">
+			</div>
+		</fieldset>
+	</form>
+
+	<form action="#" id="select-artist">
+		<fieldset>
+			<legend>Artists</legend>
+			<div>
+				<label for="artists">Select an artist</label>
+				<select id="artists"></select>
+			</div>
+		</fieldset>
+	</form>
+
+	<form action="#" id="select-album">
+		<fieldset>
+			<legend>Artists</legend>
+			<div>
+				<label for="albums">Select an artist</label>
+				<select name="" id="albums"></select>
+			</div>
+		</fieldset>
+	</form>
+
+	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script>
+
+		$("#search-artist input[type='submit']").on('click', function(event) {
+
+			event.preventDefault();
+			var nameArtist = $("#search-artist #artist-query").val();
+			var urlArtistSpotify = "https://api.spotify.com/v1/search?type=artist&query=" + nameArtist;
+
+			$.ajax({
+				url: urlArtistSpotify,
+				dataType: 'json',
+			})
+			.success(function( artistsData ) {
+				var contentSelect = "<option disabled selected>Select artist</option>";
+
+				$.each( artistsData.artists.items, function(i, elem) {
+					contentSelect += '<option value="' + elem.id + '">' + elem.name + '</option>';
+				});
+				console.log
+				$("#select-artist select").html( contentSelect );
+
+			})
+
+		});
+
+
+		$("#select-artist select").on('change', function(e) {
+			e.preventDefault();
+			var idArtist = $(this).val();
+			var urlAlbums = "https://api.spotify.com/v1/artists/" + idArtist + "/albums"
+
+			$.ajax({
+				url: urlAlbums,
+				dataType: 'json'
+			})
+			.success(function( dataAlbums ) {
+
+				var contentSelect = "<option disabled selected>Select album</option>";
+
+				$.each( dataAlbums.items, function(i, elem) {
+					contentSelect += '<option value="' + elem.id + '">' + elem.name + '</option>';
+				});
+				$("#select-album select").html( contentSelect );
+
+				console.log(dataAlbums);
+			})
+
+		})
+
+
+
+
+	</script>
+</body>
+</html>
